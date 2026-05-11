@@ -52,7 +52,7 @@ resource "null_resource" "opendataloader_ocr" {
 
   provisioner "remote-exec" {
     inline = concat([
-      "set -euo pipefail",
+      "set -eu",
       "SUDO_PASSWORD='${local.sudo_password}'",
       "sudo_cmd() { printf '%s\\n' \"$SUDO_PASSWORD\" | sudo -S -p '' \"$@\"; }",
       "sudo_cmd apt-get update",
