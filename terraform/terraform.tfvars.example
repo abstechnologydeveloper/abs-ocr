@@ -1,0 +1,11 @@
+host                      = "155.117.43.107"
+ssh_user                  = "administrator"
+domain                    = "ocr.abstechconnect.com"
+letsencrypt_email         = "admin@abstechconnect.com"
+service_port              = 5002
+device                    = "cpu"
+force_ocr                 = false
+enrich_formula            = false
+enrich_picture_description = false
+max_file_size_mb          = 80
+enable_https              = true

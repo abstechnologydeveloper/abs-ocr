@@ -1,0 +1,18 @@
+[Unit]
+Description=OpenDataLoader Hybrid OCR Server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=${ssh_user}
+WorkingDirectory=/opt/opendataloader
+Environment="PATH=/opt/opendataloader/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ExecStart=/opt/opendataloader/venv/bin/opendataloader-pdf-hybrid ${service_args}
+Restart=always
+RestartSec=5
+TimeoutStartSec=180
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target
