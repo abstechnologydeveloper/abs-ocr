@@ -11,16 +11,24 @@ variable "ssh_user" {
 }
 
 variable "ssh_password" {
-  description = "SSH password. Pass with TF_VAR_ssh_password."
+  description = "SSH password. Pass with TF_VAR_ssh_password. Leave empty when using ssh_private_key."
   type        = string
   sensitive   = true
+  default     = ""
+}
+
+variable "ssh_private_key" {
+  description = "SSH private key. Pass with TF_VAR_ssh_private_key. Preferred for GitHub CI."
+  type        = string
+  sensitive   = true
+  default     = ""
 }
 
 variable "sudo_password" {
   description = "Sudo password. If omitted, ssh_password is used."
   type        = string
   sensitive   = true
-  default     = null
+  default     = ""
 }
 
 variable "domain" {
@@ -50,7 +58,7 @@ variable "device" {
 variable "ocr_lang" {
   description = "Optional EasyOCR language list, for example en or en,fr."
   type        = string
-  default     = ""
+  default     = "en"
 }
 
 variable "force_ocr" {
@@ -62,7 +70,7 @@ variable "force_ocr" {
 variable "enrich_formula" {
   description = "Enable formula enrichment."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "enrich_picture_description" {

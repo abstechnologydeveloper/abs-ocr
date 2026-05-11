@@ -12,7 +12,7 @@ concurrency:
 jobs:
   terraform:
     name: Terraform Apply
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 45
 
     defaults:
@@ -21,17 +21,24 @@ jobs:
 
     env:
       TF_INPUT: "false"
-      TF_VAR_host: ${{ secrets.OCR_HOST }}
-      TF_VAR_ssh_user: ${{ secrets.OCR_SSH_USER }}
+      TF_VAR_host: ${{ secrets.OCR_HOST || '155.117.43.107' }}
+      TF_VAR_ssh_user: ${{ secrets.OCR_SSH_USER || 'administrator' }}
       TF_VAR_ssh_password: ${{ secrets.OCR_SSH_PASSWORD }}
+      TF_VAR_ssh_private_key: ${{ secrets.OCR_SSH_PRIVATE_KEY || secrets.SSH_PRIVATE_KEY }}
       TF_VAR_sudo_password: ${{ secrets.OCR_SUDO_PASSWORD || secrets.OCR_SSH_PASSWORD }}
       TF_VAR_domain: ${{ vars.OCR_DOMAIN || 'ocr.abstechconnect.com' }}
       TF_VAR_letsencrypt_email: ${{ vars.LETSENCRYPT_EMAIL || 'admin@abstechconnect.com' }}
       TF_VAR_enable_https: "true"
+      TF_VAR_force_ocr: ${{ vars.OCR_FORCE_OCR || 'false' }}
+      TF_VAR_ocr_lang: ${{ vars.OCR_LANG || 'en' }}
+      TF_VAR_enrich_formula: ${{ vars.OCR_ENRICH_FORMULA || 'true' }}
+      TF_VAR_enrich_picture_description: ${{ vars.OCR_ENRICH_PICTURE_DESCRIPTION || 'false' }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -52,4 +59,29 @@ jobs:
 
       - name: Verify HTTPS Health
         working-directory: .
-        run: curl -fsS "https://${{ vars.OCR_DOMAIN || 'ocr.abstechconnect.com' }}/health"
+        run: |
+          validate_http() {
+            url="$1"
+            label="$2"
+            attempts=12
+            delay=5
+            i=1
+
+            while [ "$i" -le "$attempts" ]; do
+              echo "[$label] check attempt $i/$attempts..."
+              if curl --silent --show-error --fail \
+                --retry 2 --retry-all-errors \
+                --connect-timeout 10 --max-time 30 "$url" \
+                | grep -q '"status":"ok"'; then
+                echo "[$label] check passed."
+                return 0
+              fi
+              sleep "$delay"
+              i=$((i + 1))
+            done
+
+            echo "HTTP validation failed ($label) after $attempts attempts!"
+            return 1
+          }
+
+          validate_http "https://${{ vars.OCR_DOMAIN || 'ocr.abstechconnect.com' }}/health" "ocr health"

@@ -1,5 +1,5 @@
 locals {
-  sudo_password = coalesce(var.sudo_password, var.ssh_password)
+  sudo_password = var.sudo_password != "" ? var.sudo_password : var.ssh_password
   service_files = sort(tolist(fileset("${path.module}/../service", "**")))
   service_hash = sha256(join(",", [
     for file in local.service_files : filesha256("${path.module}/../service/${file}")
@@ -31,11 +31,12 @@ resource "null_resource" "opendataloader_ocr" {
   }
 
   connection {
-    type     = "ssh"
-    host     = var.host
-    user     = var.ssh_user
-    password = var.ssh_password
-    timeout  = "2m"
+    type        = "ssh"
+    host        = var.host
+    user        = var.ssh_user
+    password    = var.ssh_password != "" ? var.ssh_password : null
+    private_key = var.ssh_private_key != "" ? var.ssh_private_key : null
+    timeout     = "2m"
   }
 
   provisioner "remote-exec" {
