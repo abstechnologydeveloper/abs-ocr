@@ -56,7 +56,7 @@ resource "null_resource" "opendataloader_ocr" {
       "SUDO_PASSWORD='${local.sudo_password}'",
       "sudo_cmd() { printf '%s\\n' \"$SUDO_PASSWORD\" | sudo -S -p '' \"$@\"; }",
       "sudo_cmd apt-get update",
-      "sudo_cmd DEBIAN_FRONTEND=noninteractive apt-get install -y python3-venv python3-pip openjdk-21-jre-headless nginx certbot python3-certbot-nginx curl",
+      "sudo_cmd env DEBIAN_FRONTEND=noninteractive apt-get install -y python3-venv python3-pip openjdk-21-jre-headless nginx certbot python3-certbot-nginx curl",
       "sudo_cmd mkdir -p /opt/opendataloader",
       "sudo_cmd chown -R ${var.ssh_user}:${var.ssh_user} /opt/opendataloader",
       "python3 -m venv /opt/opendataloader/venv",
