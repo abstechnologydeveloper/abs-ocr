@@ -1,16 +1,26 @@
-# AbS OpenDataLoader OCR Infra
+# AbS OpenDataLoader OCR
 
-Terraform deployment for the existing AbS OCR service at `ocr.abstechconnect.com`.
+Source and Terraform deployment for the AbS OCR service at `ocr.abstechconnect.com`.
 
 This project configures the current VPS. It does not create a new cloud VM.
 
 ## What It Deploys
 
-- Python venv under `/opt/opendataloader`
-- `opendataloader-pdf`
+- Deployable OCR source from `service/`
+- Python venv under `/opt/abs-ocr/venv`
+- `opendataloader-pdf==2.4.3`
+- AbS launcher: `abs-ocr-server`
 - systemd service: `opendataloader-hybrid.service`
 - nginx reverse proxy for `ocr.abstechconnect.com`
 - HTTPS certificate through Certbot
+
+## Project Layout
+
+- `service/`: local source code that is uploaded to production
+- `terraform/`: VPS deployment automation
+- `systemd/`: service template
+- `nginx/`: reverse proxy template
+- `.github/workflows/deploy.yml`: CI deployment
 
 ## Requirements
 
@@ -23,6 +33,8 @@ This project configures the current VPS. It does not create a new cloud VM.
 ### GitHub Actions Deployment
 
 This repository deploys from `.github/workflows/deploy.yml` on push to `main`.
+Local code changes should be committed and pushed to `main`; CI will copy the
+current `service/` folder to the VPS and restart production.
 
 Create these GitHub repository secrets:
 
@@ -77,6 +89,11 @@ As of this setup, the existing VPS service has been restored manually:
 - health endpoint: `https://ocr.abstechconnect.com/health`
 
 Terraform in this folder is the reproducible deployment path for later redeploys.
+
+## Upgrade OpenDataLoader
+
+Update `service/requirements.txt`, commit, and push to `main`.
+GitHub Actions will reinstall the pinned version and restart the service.
 
 ## Notes
 

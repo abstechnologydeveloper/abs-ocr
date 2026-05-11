@@ -5,3 +5,7 @@ terraform.tfvars
 *.auto.tfvars
 crash.log
 *.log
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
