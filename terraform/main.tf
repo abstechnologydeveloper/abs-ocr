@@ -28,6 +28,7 @@ resource "null_resource" "opendataloader_ocr" {
     formula          = tostring(var.enrich_formula)
     picture          = tostring(var.enrich_picture_description)
     max_size         = tostring(var.max_file_size_mb)
+    cleanup_legacy   = tostring(var.remove_legacy_install)
   }
 
   connection {
@@ -93,6 +94,7 @@ resource "null_resource" "opendataloader_ocr" {
       "sudo_cmd systemctl restart opendataloader-hybrid.service",
       "sleep 30",
       "curl -fsS http://127.0.0.1:${var.service_port}/health",
+      var.remove_legacy_install ? "sudo_cmd rm -rf /opt/opendataloader" : "true",
       "sudo_cmd systemctl reload nginx",
       ], var.enable_https ? [
       "sudo_cmd certbot --nginx -d ${var.domain} --non-interactive --agree-tos -m ${var.letsencrypt_email} --redirect || sudo_cmd certbot --nginx -d ${var.domain} --non-interactive --agree-tos --register-unsafely-without-email --redirect",

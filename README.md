@@ -14,6 +14,7 @@ This project configures the current VPS. It does not create a new cloud VM.
 - systemd service: `opendataloader-hybrid.service`
 - nginx reverse proxy for `ocr.abstechconnect.com`
 - HTTPS certificate through Certbot
+- cleanup of the old `/opt/opendataloader` install after the new service is healthy
 
 ## Project Layout
 

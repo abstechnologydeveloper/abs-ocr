@@ -102,3 +102,9 @@ variable "remove_legacy_nginx_config" {
   type        = bool
   default     = true
 }
+
+variable "remove_legacy_install" {
+  description = "Remove the old /opt/opendataloader install after the /opt/abs-ocr service is healthy."
+  type        = bool
+  default     = true
+}
