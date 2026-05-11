@@ -91,6 +91,18 @@ variable "nginx_client_max_body_size" {
   default     = "100m"
 }
 
+variable "allowed_client_cidrs" {
+  description = "CIDR/IP allowlist for OCR conversion endpoints. Health remains public."
+  type        = list(string)
+  default = [
+    "127.0.0.1",
+    "155.117.43.107",
+    "10.0.0.0/8",
+    "172.16.0.0/12",
+    "192.168.0.0/16",
+  ]
+}
+
 variable "enable_https" {
   description = "Issue/install HTTPS certificate with Certbot."
   type        = bool

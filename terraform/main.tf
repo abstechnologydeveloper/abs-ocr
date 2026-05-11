@@ -24,6 +24,7 @@ resource "null_resource" "opendataloader_ocr" {
     service_source   = local.service_hash
     domain           = var.domain
     port             = tostring(var.service_port)
+    allowed_clients  = sha256(join(",", var.allowed_client_cidrs))
     force_ocr        = tostring(var.force_ocr)
     formula          = tostring(var.enrich_formula)
     picture          = tostring(var.enrich_picture_description)
@@ -65,6 +66,7 @@ resource "null_resource" "opendataloader_ocr" {
       domain               = var.domain
       service_port         = var.service_port
       client_max_body_size = var.nginx_client_max_body_size
+      allowed_client_cidrs = var.allowed_client_cidrs
     })
     destination = "/tmp/opendataloader-ocr.conf"
   }
