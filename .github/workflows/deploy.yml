@@ -31,7 +31,7 @@ jobs:
       TF_VAR_enable_https: "true"
       TF_VAR_force_ocr: ${{ vars.OCR_FORCE_OCR || 'false' }}
       TF_VAR_ocr_lang: ${{ vars.OCR_LANG || 'en' }}
-      TF_VAR_enrich_formula: ${{ vars.OCR_ENRICH_FORMULA || 'true' }}
+      TF_VAR_enrich_formula: ${{ vars.OCR_ENRICH_FORMULA || 'false' }}
       TF_VAR_enrich_picture_description: ${{ vars.OCR_ENRICH_PICTURE_DESCRIPTION || 'false' }}
 
     steps:

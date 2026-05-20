@@ -8,6 +8,10 @@ Type=simple
 User=${ssh_user}
 WorkingDirectory=/opt/abs-ocr/service
 Environment="PATH=/opt/abs-ocr/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Environment="TOKENIZERS_PARALLELISM=false"
+Environment="OMP_NUM_THREADS=2"
+Environment="MKL_NUM_THREADS=2"
+Environment="NUMEXPR_MAX_THREADS=2"
 ExecStart=/opt/abs-ocr/venv/bin/abs-ocr-server ${service_args}
 Restart=always
 RestartSec=5

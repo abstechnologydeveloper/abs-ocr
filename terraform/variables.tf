@@ -70,7 +70,7 @@ variable "force_ocr" {
 variable "enrich_formula" {
   description = "Enable formula enrichment."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "enrich_picture_description" {

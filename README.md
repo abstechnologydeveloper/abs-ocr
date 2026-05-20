@@ -55,7 +55,7 @@ Optional repository variables:
 - `LETSENCRYPT_EMAIL`: `admin@abstechconnect.com`
 - `OCR_FORCE_OCR`: `false` by default. Set `true` for all-scanned PDF workloads.
 - `OCR_LANG`: `en` by default. Use comma-separated EasyOCR codes like `ko,en`, `fr,en`, or `ar,en`.
-- `OCR_ENRICH_FORMULA`: `true` by default for math/STEM extraction.
+- `OCR_ENRICH_FORMULA`: `false` by default. Keep it off on the current CPU VPS because the formula VLM path is slow and can crash the OCR worker.
 - `OCR_ENRICH_PICTURE_DESCRIPTION`: `false` by default because it is CPU-heavy.
 
 Then push to `main`.
@@ -136,10 +136,10 @@ For non-English OCR, deploy with:
 OCR_LANG=ko,en
 ```
 
-Formula extraction is enabled by default:
+Formula extraction is disabled by default on the current CPU VPS:
 
 ```text
-OCR_ENRICH_FORMULA=true
+OCR_ENRICH_FORMULA=false
 ```
 
 ## Notes
