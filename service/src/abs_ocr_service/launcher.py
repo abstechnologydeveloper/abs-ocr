@@ -34,6 +34,8 @@ def _default_args() -> list[str]:
 
     if _flag_enabled("ABS_OCR_FORCE_OCR"):
         args.append("--force-ocr")
+    else:
+        args.append("--no-ocr")
 
     args.append(
         "--enrich-formula"
@@ -63,4 +65,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

@@ -53,7 +53,7 @@ Optional repository variables:
 
 - `OCR_DOMAIN`: `ocr.abstechconnect.com`
 - `LETSENCRYPT_EMAIL`: `admin@abstechconnect.com`
-- `OCR_FORCE_OCR`: `false` by default. Set `true` for all-scanned PDF workloads.
+- `OCR_FORCE_OCR`: `false` by default. Keep it false on this VPS; backend should route scanned or blurred files to Azure instead of forcing OpenDataLoader OCR.
 - `OCR_LANG`: `en` by default. Use comma-separated EasyOCR codes like `ko,en`, `fr,en`, or `ar,en`.
 - `OCR_ENRICH_FORMULA`: `false` by default. Keep it off on the current CPU VPS because the formula VLM path is slow and can crash the OCR worker.
 - `OCR_ENRICH_PICTURE_DESCRIPTION`: `false` by default because it is CPU-heavy.
@@ -118,13 +118,13 @@ environment several GB larger with no benefit on this CPU machine.
 
 ## OCR Modes
 
-Default production mode is fast hybrid extraction:
+Default production mode is fast hybrid extraction without OCR:
 
 ```bash
-opendataloader-pdf-hybrid --port 5002
+opendataloader-pdf-hybrid --port 5002 --no-ocr --no-enrich-formula
 ```
 
-For image-only scanned PDFs, deploy with:
+For image-only scanned PDFs, let the backend use Azure fallback. Only deploy OpenDataLoader with forced OCR for a dedicated OCR box:
 
 ```text
 OCR_FORCE_OCR=true
@@ -144,6 +144,6 @@ OCR_ENRICH_FORMULA=false
 
 ## Notes
 
-- Default mode is hybrid auto-detect, not forced OCR. This is faster for text PDFs.
-- Set `OCR_FORCE_OCR=true` only when every page should go through OCR. That is slower and should only be used for scanned materials.
+- Default mode is hybrid layout extraction with OCR disabled. This is faster and stable for text PDFs on the current CPU VPS.
+- Set `OCR_FORCE_OCR=true` only on hardware that can run the OCR/Torch path reliably. The current VPS should leave OCR to Azure fallback.
 - Backend should call this service from a queue worker, not inside the normal request path.

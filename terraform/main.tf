@@ -10,7 +10,7 @@ locals {
     "--device ${var.device}",
     "--log-level info",
     "--max-file-size ${var.max_file_size_mb}",
-    var.force_ocr ? "--force-ocr" : "",
+    var.force_ocr ? "--force-ocr" : "--no-ocr",
     var.ocr_lang != "" ? "--ocr-lang ${var.ocr_lang}" : "",
     var.enrich_formula ? "--enrich-formula" : "--no-enrich-formula",
     var.enrich_picture_description ? "--enrich-picture-description" : "--no-enrich-picture-description",
